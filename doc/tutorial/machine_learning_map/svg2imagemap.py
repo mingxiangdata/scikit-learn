@@ -24,6 +24,7 @@ attributes in the SVG file.
 group1 through groupN are group ids.  If only want particular groups used,
 enter their ids here and all others will be ignored.
 """
+
 import os
 import re
 import sys
@@ -62,12 +63,10 @@ for e in elements:
     if e.nodeName == 'g':
         for path in e.getElementsByTagName('path'):
             points = parse_path.get_points(path.getAttribute('d'))
-            for pointset in points:
-                paths.append([path.getAttribute('id'), pointset])
+            paths.extend([path.getAttribute('id'), pointset] for pointset in points)
     else:
         points = parse_path.get_points(e.getAttribute('d'))
-        for pointset in points:
-            paths.append([e.getAttribute('id'), pointset])
+        paths.extend([e.getAttribute('id'), pointset] for pointset in points)
     if e.hasAttribute('transform'):
         print(e.getAttribute('id'), e.getAttribute('transform'))
         for transform in re.findall(r'(\w+)\((-?\d+.?\d*),(-?\d+.?\d*)\)', e.getAttribute('transform')):
@@ -80,10 +79,20 @@ for e in elements:
     parsed_groups[e.getAttribute('id')] = paths
 
 out = []
-for g in parsed_groups:
-    for path in parsed_groups[g]:
-        out.append('<area href="#" title="%s" shape="poly" coords="%s"></area>' %
-            (path[0], ', '.join([("%d,%d" % (p[0]*width_ratio, p[1]*height_ratio)) for p in path[1]])))
+for g, value in parsed_groups.items():
+    out.extend(
+        '<area href="#" title="%s" shape="poly" coords="%s"></area>'
+        % (
+            path[0],
+            ', '.join(
+                [
+                    ("%d,%d" % (p[0] * width_ratio, p[1] * height_ratio))
+                    for p in path[1]
+                ]
+            ),
+        )
+        for path in value
+    )
 
 outfile = open(sys.argv[1].replace('.svg', '.html'), 'w')
 outfile.write('\n'.join(out))

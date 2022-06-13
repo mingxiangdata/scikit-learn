@@ -82,9 +82,12 @@ def generate_data(case):
     X_train, y_train = X[:offset], y[:offset]
     X_test, y_test = X[offset:], y[offset:]
 
-    data = {'X_train': X_train, 'X_test': X_test, 'y_train': y_train,
-            'y_test': y_test}
-    return data
+    return {
+        'X_train': X_train,
+        'X_test': X_test,
+        'y_train': y_train,
+        'y_test': y_test,
+    }
 
 
 regression_data = generate_data('regression')
@@ -114,7 +117,7 @@ def benchmark_influence(conf):
         conf['tuned_params'][conf['changing_param']] = param_value
         estimator = conf['estimator'](**conf['tuned_params'])
 
-        print("Benchmarking %s" % estimator)
+        print(f"Benchmarking {estimator}")
         estimator.fit(conf['data']['X_train'], conf['data']['y_train'])
         conf['postfit_hook'](estimator)
         complexity = conf['complexity_computer'](estimator)
@@ -220,7 +223,7 @@ def plot_influence(conf, mse_values, prediction_times, complexities):
     # first axes (prediction error)
     ax1 = fig.add_subplot(111)
     line1 = ax1.plot(complexities, mse_values, c='tab:blue', ls='-')[0]
-    ax1.set_xlabel('Model Complexity (%s)' % conf['complexity_label'])
+    ax1.set_xlabel(f"Model Complexity ({conf['complexity_label']})")
     y1_label = conf['prediction_performance_label']
     ax1.set_ylabel(y1_label)
 

@@ -77,19 +77,22 @@ def subject_body_extractor(posts):
     # construct object dtype array with two columns
     # first column = 'subject' and second column = 'body'
     features = np.empty(shape=(len(posts), 2), dtype=object)
+    prefix = 'Subject:'
     for i, text in enumerate(posts):
         # temporary variable `_` stores '\n\n'
         headers, _, body = text.partition('\n\n')
         # store body text in second column
         features[i, 1] = body
 
-        prefix = 'Subject:'
-        sub = ''
-        # save text after 'Subject:' in first column
-        for line in headers.split('\n'):
-            if line.startswith(prefix):
-                sub = line[len(prefix):]
-                break
+        sub = next(
+            (
+                line[len(prefix) :]
+                for line in headers.split('\n')
+                if line.startswith(prefix)
+            ),
+            '',
+        )
+
         features[i, 0] = sub
 
     return features

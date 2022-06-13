@@ -21,6 +21,7 @@ kind of dependency between variables and it rates x_2 as the most
 discriminative feature, which probably agrees better with our intuitive
 perception for this example. Both methods correctly marks x_3 as irrelevant.
 """
+
 print(__doc__)
 
 import numpy as np
@@ -41,7 +42,7 @@ plt.figure(figsize=(15, 5))
 for i in range(3):
     plt.subplot(1, 3, i + 1)
     plt.scatter(X[:, i], y, edgecolor='black', s=20)
-    plt.xlabel("$x_{}$".format(i + 1), fontsize=14)
+    plt.xlabel(f"$x_{i + 1}$", fontsize=14)
     if i == 0:
         plt.ylabel("$y$", fontsize=14)
     plt.title("F-test={:.2f}, MI={:.2f}".format(f_test[i], mi[i]),

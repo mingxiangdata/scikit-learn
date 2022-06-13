@@ -81,10 +81,22 @@ alpha_aic_ = model_aic.alpha_
 
 def plot_ic_criterion(model, name, color):
     criterion_ = model.criterion_
-    plt.semilogx(model.alphas_ + EPSILON, criterion_, '--', color=color,
-                 linewidth=3, label='%s criterion' % name)
-    plt.axvline(model.alpha_ + EPSILON, color=color, linewidth=3,
-                label='alpha: %s estimate' % name)
+    plt.semilogx(
+        model.alphas_ + EPSILON,
+        criterion_,
+        '--',
+        color=color,
+        linewidth=3,
+        label=f'{name} criterion',
+    )
+
+    plt.axvline(
+        model.alpha_ + EPSILON,
+        color=color,
+        linewidth=3,
+        label=f'alpha: {name} estimate',
+    )
+
     plt.xlabel(r'$\alpha$')
     plt.ylabel('criterion')
 

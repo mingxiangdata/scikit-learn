@@ -131,7 +131,7 @@ def plot_obs_pred(df, feature, weight, observed, predicted, y_label=None,
         alpha=0.1,
     )
     if fill_legend:
-        ax.legend([p2], ["{} distribution".format(feature)])
+        ax.legend([p2], [f"{feature} distribution"])
     ax.set(
         ylabel=y_label if y_label is not None else None,
         title=title if title is not None else "Train: Observed vs Predicted",

@@ -31,6 +31,7 @@ using many fewer estimators. This can significantly reduce training time,
 memory usage and prediction latency.
 """
 
+
 # Authors: Vighnesh Birodkar <vighneshbirodkar@nyu.edu>
 #          Raghav RV <rvraghav93@gmail.com>
 # License: BSD 3 clause
@@ -89,7 +90,7 @@ for X, y in data_list:
 bar_width = 0.2
 n = len(data_list)
 index = np.arange(0, n * bar_width, bar_width) * 2.5
-index = index[0:n]
+index = index[:n]
 
 # %%
 # Compare scores with and without early stopping
