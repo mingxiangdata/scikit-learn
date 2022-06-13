@@ -13,6 +13,7 @@ step before the final (global) clustering step that further reduces these
 158 clusters to 100 clusters.
 """
 
+
 # Authors: Manoj Kumar <manojkumarsivaraj334@gmail.com
 #          Alexandre Gramfort <alexandre.gramfort@telecom-paristech.fr>
 # License: BSD 3 clause
@@ -75,7 +76,7 @@ for ind, (birch_model, info) in enumerate(zip(birch_models, final_step)):
     ax.set_ylim([-25, 25])
     ax.set_xlim([-25, 25])
     ax.set_autoscaley_on(False)
-    ax.set_title('BIRCH %s' % info)
+    ax.set_title(f'BIRCH {info}')
 
 # Compute clustering with MiniBatchKMeans.
 mbk = MiniBatchKMeans(init='k-means++', n_clusters=100, batch_size=100,

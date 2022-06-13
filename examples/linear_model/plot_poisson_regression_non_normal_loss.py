@@ -35,6 +35,7 @@ policyholders.
     <http://dx.doi.org/10.2139/ssrn.3164764>`_
 
 """
+
 print(__doc__)
 # Authors: Christian Lorentzen <lorentzen.ch@gmail.com>
 #          Roman Yurchak <rth.yurchak@gmail.com>
@@ -70,8 +71,10 @@ df
 
 df["Frequency"] = df["ClaimNb"] / df["Exposure"]
 
-print("Average Frequency = {}"
-      .format(np.average(df["Frequency"], weights=df["Exposure"])))
+print(
+    f'Average Frequency = {np.average(df["Frequency"], weights=df["Exposure"])}'
+)
+
 
 print("Fraction of exposure with zero claims = {0:.1%}"
       .format(df.loc[df["ClaimNb"] == 0, "Exposure"].sum() /

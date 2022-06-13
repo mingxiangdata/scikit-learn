@@ -21,6 +21,7 @@ While these examples give some intuition about the
 algorithms, this intuition might not apply to very high
 dimensional data.
 """
+
 print(__doc__)
 
 import time
@@ -82,7 +83,7 @@ datasets = [
 for i_dataset, (dataset, algo_params) in enumerate(datasets):
     # update parameters with dataset-specific values
     params = default_base.copy()
-    params.update(algo_params)
+    params |= algo_params
 
     X, y = dataset
 

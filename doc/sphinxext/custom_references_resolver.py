@@ -49,17 +49,14 @@ class CustomReferencesResolver(ReferencesResolver):
         if "py:class" in node:
             with suppress(KeyError):
                 py_domain = self.env.domains["py"]
-                py_ref = py_domain.resolve_any_xref(
+                if py_ref := py_domain.resolve_any_xref(
                     self.env, refdoc, self.app.builder, target, node, contnode
-                )
-                if py_ref:
+                ):
                     return self.create_node(py_ref[0])
 
-        # resolve :term:
-        term_ref = stddomain.resolve_xref(
+        if term_ref := stddomain.resolve_xref(
             self.env, refdoc, self.app.builder, "term", target, node, contnode
-        )
-        if term_ref:
+        ):
             # replace literal nodes with inline nodes
             if not isinstance(term_ref[0], nodes.inline):
                 inline_node = nodes.inline(
@@ -70,19 +67,16 @@ class CustomReferencesResolver(ReferencesResolver):
                 term_ref[0] = inline_node
             return self.create_node(("std:term", term_ref))
 
-        # next, do the standard domain
-        std_ref = stddomain.resolve_any_xref(
+        if std_ref := stddomain.resolve_any_xref(
             self.env, refdoc, self.app.builder, target, node, contnode
-        )
-        if std_ref:
+        ):
             return self.create_node(std_ref[0])
 
         for domain in self.env.domains.values():
             try:
-                ref = domain.resolve_any_xref(
+                if ref := domain.resolve_any_xref(
                     self.env, refdoc, self.app.builder, target, node, contnode
-                )
-                if ref:
+                ):
                     return self.create_node(ref[0])
             except NotImplementedError:
                 # the domain doesn't yet support the new interface
@@ -92,7 +86,7 @@ class CustomReferencesResolver(ReferencesResolver):
                         self.env, refdoc, self.app.builder, role, target, node, contnode
                     )
                     if res and isinstance(res[0], nodes.Element):
-                        result = ("%s:%s" % (domain.name, role), res)
+                        result = f"{domain.name}:{role}", res
                         return self.create_node(result)
 
         # no results considered to be <code>

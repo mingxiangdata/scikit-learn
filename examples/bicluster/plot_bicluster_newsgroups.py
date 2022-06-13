@@ -90,7 +90,7 @@ print("Done in {:.2f}s. V-measure: {:.4f}".format(
     v_measure_score(y_kmeans, y_true)))
 
 feature_names = vectorizer.get_feature_names_out()
-document_names = list(newsgroups.target_names[i] for i in newsgroups.target)
+document_names = [newsgroups.target_names[i] for i in newsgroups.target]
 
 
 def bicluster_ncut(i):
@@ -116,8 +116,10 @@ def most_common(d):
     return sorted(d.items(), key=operator.itemgetter(1), reverse=True)
 
 
-bicluster_ncuts = list(bicluster_ncut(i)
-                       for i in range(len(newsgroups.target_names)))
+bicluster_ncuts = [
+    bicluster_ncut(i) for i in range(len(newsgroups.target_names))
+]
+
 best_idx = np.argsort(bicluster_ncuts)[:5]
 
 print()
@@ -143,10 +145,11 @@ for idx, cluster in enumerate(best_idx):
     word_scores = np.array(word_col[cluster_docs, :].sum(axis=0) -
                            word_col[out_of_cluster_docs, :].sum(axis=0))
     word_scores = word_scores.ravel()
-    important_words = list(feature_names[cluster_words[i]]
-                           for i in word_scores.argsort()[:-11:-1])
+    important_words = [
+        feature_names[cluster_words[i]] for i in word_scores.argsort()[:-11:-1]
+    ]
 
-    print("bicluster {} : {} documents, {} words".format(
-        idx, n_rows, n_cols))
-    print("categories   : {}".format(cat_string))
+
+    print(f"bicluster {idx} : {n_rows} documents, {n_cols} words")
+    print(f"categories   : {cat_string}")
     print("words        : {}\n".format(', '.join(important_words)))

@@ -10,6 +10,7 @@ visualize how well calibrated the predicted probabilities are using calibration
 curves, also known as reliability diagrams. Calibration of an uncalibrated
 classifier will also be demonstrated.
 """
+
 print(__doc__)
 # %%
 
@@ -132,7 +133,7 @@ from sklearn.metrics import (precision_score, recall_score, f1_score,
                              brier_score_loss, log_loss, roc_auc_score)
 
 scores = defaultdict(list)
-for i, (clf, name) in enumerate(clf_list):
+for clf, name in clf_list:
     clf.fit(X_train, y_train)
     y_prob = clf.predict_proba(X_test)
     y_pred = clf.predict(X_test)
@@ -198,8 +199,7 @@ class NaivelyCalibratedLinearSVC(LinearSVC):
         calibrated_df = (df - self.df_min_) / (self.df_max_ - self.df_min_)
         proba_pos_class = np.clip(calibrated_df, 0, 1)
         proba_neg_class = 1 - proba_pos_class
-        proba = np.c_[proba_neg_class, proba_pos_class]
-        return proba
+        return np.c_[proba_neg_class, proba_pos_class]
 
 
 # %%
@@ -267,7 +267,7 @@ plt.show()
 # :ref:`ROC AUC <roc_metrics>`.
 
 scores = defaultdict(list)
-for i, (clf, name) in enumerate(clf_list):
+for clf, name in clf_list:
     clf.fit(X_train, y_train)
     y_prob = clf.predict_proba(X_test)
     y_pred = clf.predict(X_test)

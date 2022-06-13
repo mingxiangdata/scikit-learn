@@ -61,11 +61,11 @@ class ReutersParser(HTMLParser):
         self.encoding = encoding
 
     def handle_starttag(self, tag, attrs):
-        method = 'start_' + tag
+        method = f'start_{tag}'
         getattr(self, method, lambda x: None)(attrs)
 
     def handle_endtag(self, tag):
-        method = 'end_' + tag
+        method = f'end_{tag}'
         getattr(self, method, lambda: None)()
 
     def _reset(self):
@@ -82,8 +82,7 @@ class ReutersParser(HTMLParser):
         self.docs = []
         for chunk in fd:
             self.feed(chunk.decode(self.encoding))
-            for doc in self.docs:
-                yield doc
+            yield from self.docs
             self.docs = []
         self.close()
 
@@ -326,8 +325,8 @@ def plot_accuracy(x, y, x_legend):
     """Plot accuracy as a function of x."""
     x = np.array(x)
     y = np.array(y)
-    plt.title('Classification accuracy as a function of %s' % x_legend)
-    plt.xlabel('%s' % x_legend)
+    plt.title(f'Classification accuracy as a function of {x_legend}')
+    plt.xlabel(f'{x_legend}')
     plt.ylabel('Accuracy')
     plt.grid(True)
     plt.plot(x, y)
@@ -393,10 +392,11 @@ plt.show()
 
 # Plot prediction times
 plt.figure()
-cls_runtime = []
 cls_names = list(sorted(cls_stats.keys()))
-for cls_name, stats in sorted(cls_stats.items()):
-    cls_runtime.append(stats['prediction_time'])
+cls_runtime = [
+    stats['prediction_time'] for cls_name, stats in sorted(cls_stats.items())
+]
+
 cls_runtime.append(parsing_time)
 cls_names.append('Read/Parse\n+Feat.Extr.')
 cls_runtime.append(vectorizing_time)

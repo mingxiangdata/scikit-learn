@@ -116,7 +116,7 @@ gp = GaussianProcessRegressor(kernel=kernel_gpml, alpha=0,
                               optimizer=None, normalize_y=True)
 gp.fit(X, y)
 
-print("GPML kernel: %s" % gp.kernel_)
+print(f"GPML kernel: {gp.kernel_}")
 print("Log-marginal-likelihood: %.3f"
       % gp.log_marginal_likelihood(gp.kernel_.theta))
 

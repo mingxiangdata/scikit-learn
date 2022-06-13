@@ -14,6 +14,7 @@ We classify 8x8 images of digits into two classes: 0-4 against 5-9.
 The visualization shows coefficients of the models for varying C.
 """
 
+
 print(__doc__)
 
 # Authors: Alexandre Gramfort <alexandre.gramfort@inria.fr>
@@ -84,6 +85,6 @@ for i, (C, axes_row) in enumerate(zip((1, 0.1, 0.01), axes)):
         ax.set_xticks(())
         ax.set_yticks(())
 
-    axes_row[0].set_ylabel('C = %s' % C)
+    axes_row[0].set_ylabel(f'C = {C}')
 
 plt.show()
